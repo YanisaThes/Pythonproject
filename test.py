@@ -1,4 +1,4 @@
-
+'''
 from tkinter import *
 root = Tk()
 root.title("Tzx calculation programme")
@@ -21,16 +21,23 @@ entry.pack(pady=20)
 clearbutton.pack(ipadx=10,ipady=10)
 root.mainloop()
 
-
+'''
 count = 0
 tax_brackets = [(0, 150000, 0), (150001, 300000, 0.05), (300001, 500000, 0.1), (500001, 750000, 0.15),(750001,1000000,0.2),(1000001,2000000,0.25),(2000001,5000000,0.3),(50000001,float("inf"),0.35)]
 tax_deduction = []
+
 def calculate_net_income(income):
     income - 60000
     return income
+def calculate_tax(income, tax_brackets):
+    for lower, upper, rate in tax_brackets:
+        if lower <= income <= upper:
+            return income * rate
+        
+
 
 Id = input("Please provide you national ID number: ")
-fullic = input("Please input your annual income:  ")
+fullic = int(input("Please input your annual income:  "))
 status = input("Please input your status 1-4 \n1 Single\n2 Divorce\n3 Married\n4 Marreid but did not earn money\n")
 if status == 3 or 4:
     q = int(input("How do you pay tax? \n1 report taxes seperately\n2 combind with your partner\n: "))
@@ -76,17 +83,22 @@ socialsec = int(input("Please input social security contributions: "))
 if socialsec>9000:
     socialsec = 9000
 tax_deduction.append(socialsec)
-houseinsure = "Please input your Interest on housing purchases: "
+houseinsure = int(input("Please input your Interest on housing purchases: "))
 if houseinsure > 100000:
     houseinsure = 100000
 tax_deduction.append(houseinsure)
-funds = "Please input other funds: "
-donate = "Please input your taxdeduction on donation: "
+funds = int(input("Please input other funds: "))
+tax_deduction.append(funds)
+donate = int(input("Please input your taxdeduction on donation: "))
+tax_deduction.append(donate)
 left = fullic-sum(tax_deduction)
 if donate>left:
     donate = left*0.1
     tax_deduction.append(donate)
-print(tax_deduction)
+
+tax = calculate_tax(left, tax_brackets)
+tax = round(tax,2)
+print(f"Tax for income ${left}: ${tax}")
 
 
 
